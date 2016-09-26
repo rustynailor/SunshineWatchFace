@@ -26,6 +26,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -100,6 +102,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
         boolean mAmbient;
         Calendar mCalendar;
         Date mDate;
+        BitmapDrawable mWeatherIcon;
         float mLineHeight;
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
             @Override
@@ -146,6 +149,10 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
             mDateTextPaint.setTextSize(resources.getDimension(R.dimen.digital_date_text_size));
 
             mCalendar = Calendar.getInstance();
+
+            //get icon
+            Drawable weatherBitmap = resources.getDrawable(R.drawable.ic_clear);
+
 
             //set Date formatter
             mDateFormat = new SimpleDateFormat("EEE, MMM d yyyy");
