@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -102,7 +104,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
         boolean mAmbient;
         Calendar mCalendar;
         Date mDate;
-        BitmapDrawable mWeatherIcon;
+        Bitmap mWeatherIcon;
         float mLineHeight;
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
             @Override
@@ -151,7 +153,8 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
             mCalendar = Calendar.getInstance();
 
             //get icon
-            Drawable weatherBitmap = resources.getDrawable(R.drawable.ic_clear);
+            Drawable weatherBitmap = resources.getDrawable(R.drawable.ic_clear,null);
+            mWeatherIcon = ((BitmapDrawable) weatherBitmap).getBitmap();
 
 
             //set Date formatter
@@ -308,6 +311,25 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
             //now paint date string
             //TODO: different colour in ambient
             canvas.drawText(mDateFormat.format(mDate).toUpperCase(), bounds.centerX() - (xDateWidth / 2), mYOffset + mLineHeight * 2, mDateTextPaint);
+
+            //TODO: make dynamic
+            //now add icon
+
+            //TODO: scale bitmap
+            String highTempString = "25";
+            String lowTempString = "16";
+
+            //get center point for lower row items
+            float posCenterLeftThird = (bounds.width() / 3) / 2; //minus half width of scaled bitmpa
+            float posCenter = bounds.centerX() - (mMinuteTextPaint.measureText(highTempString) / 2);
+            float posCenterRightThird = bounds.centerX() + (bounds.centerX() / 2) - (mMinuteTextPaint.measureText(lowTempString) / 2);
+
+            canvas.drawBitmap(mWeatherIcon, 0, mYOffset + mLineHeight * 3, null);
+            canvas.drawText("25", posCenter, mYOffset + mLineHeight * 6, mMinuteTextPaint);
+            canvas.drawText("16", posCenterRightThird, mYOffset + mLineHeight * 6, mMinuteTextPaint);
+
+
+
         }
 
         /**
