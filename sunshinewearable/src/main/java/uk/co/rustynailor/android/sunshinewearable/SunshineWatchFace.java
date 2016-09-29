@@ -348,8 +348,8 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
 
 
             canvas.drawBitmap(mWeatherIcon, posCenterLeftThird, (mYOffset + mLineHeight * 6) - (mWeatherIcon.getHeight() / 1.5f), null);
-            canvas.drawText("25", posCenter, mYOffset + mLineHeight * 6, mHighTextPaint);
-            canvas.drawText("16", posCenterRightThird, mYOffset + mLineHeight * 6, mLowTextPaint);
+            canvas.drawText(highTempString, posCenter, mYOffset + mLineHeight * 6, mHighTextPaint);
+            canvas.drawText(lowTempString, posCenterRightThird, mYOffset + mLineHeight * 6, mLowTextPaint);
 
 
 
