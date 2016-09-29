@@ -100,6 +100,8 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
         Paint mMinuteTextPaint;
         Paint mHourTextPaint;
         Paint mDateTextPaint;
+        Paint mLowTextPaint;
+        Paint mHighTextPaint;
         SimpleDateFormat mDateFormat;
         boolean mAmbient;
         Calendar mCalendar;
@@ -145,6 +147,14 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
 
             mHourTextPaint = new Paint();
             mHourTextPaint = createTextPaint(resources.getColor(R.color.digital_text), BOLD_TYPEFACE);
+
+            mLowTextPaint = new Paint();
+            mLowTextPaint = createTextPaint(resources.getColor(R.color.digital_text_secondary), NORMAL_TYPEFACE);
+            mLowTextPaint.setTextSize(resources.getDimension(R.dimen.digital_temp_text_size));
+
+            mHighTextPaint = new Paint();
+            mHighTextPaint = createTextPaint(resources.getColor(R.color.digital_text), BOLD_TYPEFACE);
+            mHighTextPaint.setTextSize(resources.getDimension(R.dimen.digital_temp_text_size));
 
             mDateTextPaint = new Paint();
             mDateTextPaint = createTextPaint(resources.getColor(R.color.digital_text_secondary), NORMAL_TYPEFACE);
@@ -315,18 +325,31 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
             //TODO: make dynamic
             //now add icon
 
-            //TODO: scale bitmap
-            String highTempString = "25";
-            String lowTempString = "16";
+            String highTempString = String.format(SunshineWatchFace.this.getString(R.string.format_temperature), 25f);
+            String lowTempString = String.format(SunshineWatchFace.this.getString(R.string.format_temperature), 16f);
+
+            /*
+             * Calculate size of icon bitmap so it is 1/4th of a screen width
+             */
+            float iconSize = (float) (bounds.width() /4);
+
+            /* Scale loaded background image (more efficient) if surface dimensions change. */
+            float scale = ((float) iconSize) / (float) mWeatherIcon.getWidth();
+
+            mWeatherIcon = Bitmap.createScaledBitmap(mWeatherIcon,
+                    (int) (mWeatherIcon.getWidth() * scale),
+                    (int) (mWeatherIcon.getHeight() * scale), true);
+
 
             //get center point for lower row items
-            float posCenterLeftThird = (bounds.width() / 3) / 2; //minus half width of scaled bitmpa
-            float posCenter = bounds.centerX() - (mMinuteTextPaint.measureText(highTempString) / 2);
-            float posCenterRightThird = bounds.centerX() + (bounds.centerX() / 2) - (mMinuteTextPaint.measureText(lowTempString) / 2);
+            float posCenterLeftThird = ((bounds.width() / 3)) / 1.5f - (mWeatherIcon.getWidth() / 2); //minus half width of scaled bitmpa
+            float posCenter = bounds.centerX() - (mHighTextPaint.measureText(highTempString) / 2);
+            float posCenterRightThird = posCenter * 1.6f;
 
-            canvas.drawBitmap(mWeatherIcon, 0, mYOffset + mLineHeight * 3, null);
-            canvas.drawText("25", posCenter, mYOffset + mLineHeight * 6, mMinuteTextPaint);
-            canvas.drawText("16", posCenterRightThird, mYOffset + mLineHeight * 6, mMinuteTextPaint);
+
+            canvas.drawBitmap(mWeatherIcon, posCenterLeftThird, (mYOffset + mLineHeight * 6) - (mWeatherIcon.getHeight() / 1.5f), null);
+            canvas.drawText("25", posCenter, mYOffset + mLineHeight * 6, mHighTextPaint);
+            canvas.drawText("16", posCenterRightThird, mYOffset + mLineHeight * 6, mLowTextPaint);
 
 
 
