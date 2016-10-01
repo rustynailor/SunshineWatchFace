@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,6 +40,8 @@ import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -56,12 +59,13 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
     private static final Typeface BOLD_TYPEFACE =
             Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
 
+    private int weatherId;
+
 
     /**
-     * Update rate in milliseconds for interactive mode. We update once a second since seconds are
-     * displayed in interactive mode.
+     * Update rate in milliseconds for interactive mode - once every 10s
      */
-    private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
+    private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(10);
 
     /**
      * Handler message id for updating the time periodically in interactive mode.
@@ -281,9 +285,6 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
                     break;
                 case TAP_TYPE_TAP:
                     // The user has completed the tap gesture.
-                    // TODO: Add code to handle the tap gesture.
-                    Toast.makeText(getApplicationContext(), R.string.message, Toast.LENGTH_SHORT)
-                            .show();
                     break;
             }
             invalidate();
@@ -321,14 +322,18 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
             //now paint date string
             canvas.drawText(mDateFormat.format(mDate).toUpperCase(), bounds.centerX() - (xDateWidth / 2), mYOffset + mLineHeight * 2, mDateTextPaint);
 
-            //TODO: make dynamic
             //now show weather if not in ambient mode
 
             if (!isInAmbientMode()) {
 
+                //get weather data from shared preferences
+                SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.weather_data_prefs), Context.MODE_PRIVATE);
 
-                String highTempString = String.format(SunshineWatchFace.this.getString(R.string.format_temperature), 25f);
-                String lowTempString = String.format(SunshineWatchFace.this.getString(R.string.format_temperature), 16f);
+                String highTemp = sharedPref.getString(getString(R.string.high_temp), "-");
+                String lowTemp = sharedPref.getString(getString(R.string.low_temp), "-");
+
+                String highTempString = String.format(SunshineWatchFace.this.getString(R.string.format_temperature), highTemp);
+                String lowTempString = String.format(SunshineWatchFace.this.getString(R.string.format_temperature), lowTemp);
 
             /*
              * Calculate size of icon bitmap so it is 1/4th of a screen width

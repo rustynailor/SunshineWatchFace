@@ -2,8 +2,13 @@
     <string name="app_name">SunshineWearable</string>
     <string name="message">Watch face tapped</string>
     <string name="my_digital_name">My Digital</string>
-    <string name="sunshine">Sunshine</string>
+    <string name="sunshine">SunshineWear</string>
     <!-- Strings for formatting weather-related data -->
     <!-- Temperature format [CHAR LIMIT=5 -->
-    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
+    <string name="format_temperature"><xliff:g id="temp">%1s</xliff:g>\u00B0</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="weather_data_prefs">weather_data_prefs</string>
+    <string name="high_temp">high_temp</string>
+    <string name="low_temp">low_temp</string>
+    <string name="weather_id">weather_id</string>
 </resources>
