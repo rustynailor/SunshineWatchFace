@@ -33,12 +33,15 @@ public class SunshineListenerService extends WearableListenerService
 
     @Override
     public void onCreate() {
-
+        super.onCreate();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+        mGoogleApiClient.connect();
+
+        Log.e(TAG, "OnCreate Called");
     }
 
     @Override
@@ -91,6 +94,8 @@ public class SunshineListenerService extends WearableListenerService
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+        Log.e(TAG, "Connection failed");
 
     }
 

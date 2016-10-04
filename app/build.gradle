@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "com.example.android.sunshine.app"
@@ -33,7 +33,7 @@ dependencies {
     compile 'com.android.support:design:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
     compile 'com.google.android.apps.muzei:muzei-api:2.0'
-    compile 'com.google.android.gms:play-services-gcm:7.5.0'
-    wearApp project(':sunshinewearable')
+    compile 'com.google.android.gms:play-services-gcm:9.6.1'
     compile 'com.google.android.gms:play-services-wearable:9.6.1'
+    wearApp project(':sunshinewearable')
 }
