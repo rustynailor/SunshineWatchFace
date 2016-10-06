@@ -123,6 +123,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements
     private static final String WEATHER_HIGH_KEY = "com.example.android.sunshine.app.high.key";
     private static final String WEATHER_LOW_KEY = "com.example.android.sunshine.app.low.key";
     private static final String WEATHER_ID_KEY = "com.example.android.sunshine.app.low.key";
+    private static final String TIME_STAMP_WATCH_FACE_KEY = "com.example.android.sunshine.app.ts.key";
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -427,19 +428,22 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements
             int weatherId = cursor.getInt(INDEX_WEATHER_ID);
             //todo - pass bitmap
             //...
-            PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/weather");
+            PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/weather").setUrgent();
             putDataMapReq.getDataMap().putDouble(WEATHER_HIGH_KEY, high);
             putDataMapReq.getDataMap().putDouble(WEATHER_LOW_KEY, low);
             putDataMapReq.getDataMap().putInt(WEATHER_ID_KEY, weatherId);
+            putDataMapReq .getDataMap().putLong(TIME_STAMP_WATCH_FACE_KEY, System.currentTimeMillis());
             PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
             PendingResult<DataApi.DataItemResult> pendingResult =
                     Wearable.DataApi.putDataItem(mGoogleApiClient, putDataReq);
+
+            Log.e(LOG_TAG, "data sent to android wear");
 
         }
 
         cursor.close();
 
-        Log.e(LOG_TAG, "data sent to android wear");
+
 
 
         }
