@@ -1,4 +1,4 @@
-package uk.co.rustynailor.android.sunshinewearable;
+package com.example.android.sunshine.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
