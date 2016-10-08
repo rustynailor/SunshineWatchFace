@@ -27,7 +27,7 @@ public class SunshineListenerService extends WearableListenerService
 
     private static final String WEATHER_HIGH_KEY = "com.example.android.sunshine.app.high.key";
     private static final String WEATHER_LOW_KEY = "com.example.android.sunshine.app.low.key";
-    private static final String WEATHER_ID_KEY = "com.example.android.sunshine.app.low.key";
+    private static final String WEATHER_ID_KEY = "com.example.android.sunshine.app.id.key";
 
     private GoogleApiClient mGoogleApiClient;
 

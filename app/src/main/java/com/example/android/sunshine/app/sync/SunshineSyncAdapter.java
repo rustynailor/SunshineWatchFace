@@ -41,6 +41,7 @@ import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.PutDataMapRequest;
@@ -122,7 +123,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements
 
     private static final String WEATHER_HIGH_KEY = "com.example.android.sunshine.app.high.key";
     private static final String WEATHER_LOW_KEY = "com.example.android.sunshine.app.low.key";
-    private static final String WEATHER_ID_KEY = "com.example.android.sunshine.app.low.key";
+    private static final String WEATHER_ID_KEY = "com.example.android.sunshine.app.id.key";
     private static final String TIME_STAMP_WATCH_FACE_KEY = "com.example.android.sunshine.app.ts.key";
 
     private GoogleApiClient mGoogleApiClient;
@@ -136,6 +137,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -434,10 +437,28 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements
             putDataMapReq.getDataMap().putInt(WEATHER_ID_KEY, weatherId);
             putDataMapReq.getDataMap().putLong(TIME_STAMP_WATCH_FACE_KEY, System.currentTimeMillis());
             PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
+
             PendingResult<DataApi.DataItemResult> pendingResult =
                     Wearable.DataApi.putDataItem(mGoogleApiClient, putDataReq);
 
-            Log.e(LOG_TAG, "data sent to android wear");
+            pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+                @Override
+                public void onResult(@NonNull DataApi.DataItemResult dataItemResult) {
+                    if (dataItemResult.getStatus().isSuccess()) {
+                        Log.e(LOG_TAG, "Data item set: " + dataItemResult.getDataItem().getUri());
+
+                    } else {
+                        // There was an error sending the data
+                        Log.e(LOG_TAG, "data not sent to android wear");
+
+
+                    }
+                }
+
+            });
+
+
+
 
         }
 
