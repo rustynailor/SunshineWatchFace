@@ -11,4 +11,5 @@
     <string name="high_temp">high_temp</string>
     <string name="low_temp">low_temp</string>
     <string name="weather_id">weather_id</string>
+    <string name="empty_string_placeholder">-</string>
 </resources>

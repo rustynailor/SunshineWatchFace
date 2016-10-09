@@ -429,11 +429,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements
             double high = cursor.getDouble(INDEX_MAX_TEMP);
             double low = cursor.getDouble(INDEX_MIN_TEMP);
             int weatherId = cursor.getInt(INDEX_WEATHER_ID);
-            //todo - pass bitmap
-            //...
             PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/weather").setUrgent();
-            putDataMapReq.getDataMap().putDouble(WEATHER_HIGH_KEY, high);
-            putDataMapReq.getDataMap().putDouble(WEATHER_LOW_KEY, low);
+            putDataMapReq.getDataMap().putString(WEATHER_HIGH_KEY, getContext().getString(R.string.format_temperature, high));
+            putDataMapReq.getDataMap().putString(WEATHER_LOW_KEY, getContext().getString(R.string.format_temperature, low));
             putDataMapReq.getDataMap().putInt(WEATHER_ID_KEY, weatherId);
             putDataMapReq.getDataMap().putLong(TIME_STAMP_WATCH_FACE_KEY, System.currentTimeMillis());
             PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();

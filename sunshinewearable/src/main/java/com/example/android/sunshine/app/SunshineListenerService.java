@@ -66,8 +66,8 @@ public class SunshineListenerService extends WearableListenerService
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo(DATA_ITEM_RECEIVED_PATH) == 0) {
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                    Double high = dataMap.getDouble(WEATHER_HIGH_KEY);
-                    Double low = dataMap.getDouble(WEATHER_LOW_KEY);
+                    String high = dataMap.getString(WEATHER_HIGH_KEY);
+                    String low = dataMap.getString(WEATHER_LOW_KEY);
                     int weatherId = dataMap.getInt(WEATHER_ID_KEY);
                     updateWeather(weatherId, high, low);
                 }
@@ -78,14 +78,14 @@ public class SunshineListenerService extends WearableListenerService
     }
 
     // Our method to update weather - save to shared preferences
-    private void updateWeather(int weatherId, Double high, Double low) {
+    private void updateWeather(int weatherId, String high, String low) {
 
         Log.e(TAG, "Weather Received: " + high + " " + low);
         //save to shared preferences
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.weather_data_prefs), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString(getString(R.string.high_temp), Double.toString(high));
-        editor.putString(getString(R.string.low_temp), Double.toString(low));
+        editor.putString(getString(R.string.high_temp), high);
+        editor.putString(getString(R.string.low_temp), low);
         editor.putInt(getString(R.string.weather_id), weatherId);
         editor.commit();
 

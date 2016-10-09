@@ -325,11 +325,8 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
                 //get weather data from shared preferences
                 SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(getString(R.string.weather_data_prefs), Context.MODE_PRIVATE);
 
-                String highTemp = sharedPref.getString(getString(R.string.high_temp), "-");
-                String lowTemp = sharedPref.getString(getString(R.string.low_temp), "-");
-
-                String highTempString = String.format(SunshineWatchFace.this.getString(R.string.format_temperature), highTemp);
-                String lowTempString = String.format(SunshineWatchFace.this.getString(R.string.format_temperature), lowTemp);
+                String highTemp = sharedPref.getString(getString(R.string.high_temp), getString(R.string.empty_string_placeholder));
+                String lowTemp = sharedPref.getString(getString(R.string.low_temp), getString(R.string.empty_string_placeholder));
 
             /*
              * Calculate size of icon bitmap so it is 1/4th of a screen width
@@ -346,13 +343,13 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
 
                 //get center point for lower row items
                 float posCenterLeftThird = ((bounds.width() / 3)) / 1.5f - (mWeatherIcon.getWidth() / 2); //minus half width of scaled bitmpa
-                float posCenter = bounds.centerX() - (mHighTextPaint.measureText(highTempString) / 2);
-                float posCenterRightThird = posCenter * 1.6f;
+                float posCenter = bounds.centerX() - (mHighTextPaint.measureText(highTemp) / 2);
+                float posCenterRightThird = (bounds.centerX() * 1.5f) - (mLowTextPaint.measureText(lowTemp) / 2);
 
 
                 canvas.drawBitmap(mWeatherIcon, posCenterLeftThird, (mYOffset + mLineHeight * 6) - (mWeatherIcon.getHeight() / 1.5f), null);
-                canvas.drawText(highTempString, posCenter, mYOffset + mLineHeight * 6, mHighTextPaint);
-                canvas.drawText(lowTempString, posCenterRightThird, mYOffset + mLineHeight * 6, mLowTextPaint);
+                canvas.drawText(highTemp, posCenter, mYOffset + mLineHeight * 6, mHighTextPaint);
+                canvas.drawText(lowTemp, posCenterRightThird, mYOffset + mLineHeight * 6, mLowTextPaint);
 
             }
 
