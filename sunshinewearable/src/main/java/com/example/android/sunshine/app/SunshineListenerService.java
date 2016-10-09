@@ -40,14 +40,11 @@ public class SunshineListenerService extends WearableListenerService
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
-
-        Log.e(TAG, "OnCreate Called");
     }
 
     @Override
     public void onConnected(Bundle bundle) {
         Wearable.DataApi.addListener(mGoogleApiClient, this);
-        Log.e(TAG, "Google API Client was connected");
     }
 
     @Override
@@ -58,7 +55,6 @@ public class SunshineListenerService extends WearableListenerService
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
-        Log.e(TAG, "On data changed");
 
         for (DataEvent event : dataEvents) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
@@ -79,8 +75,6 @@ public class SunshineListenerService extends WearableListenerService
 
     // Our method to update weather - save to shared preferences
     private void updateWeather(int weatherId, String high, String low) {
-
-        Log.e(TAG, "Weather Received: " + high + " " + low);
         //save to shared preferences
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.weather_data_prefs), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
