@@ -117,6 +117,7 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
         };
         float mXOffset;
         float mYOffset;
+        int mWeatherIconId = 800; //used to track weather icon state - default is 800 (sunny)
 
         /**
          * Whether the display supports fewer bits for each color in ambient mode. When true, we
@@ -163,13 +164,45 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
             mCalendar = Calendar.getInstance();
 
             //get icon
-            Drawable weatherBitmap = resources.getDrawable(R.drawable.ic_clear,null);
-            mWeatherIcon = ((BitmapDrawable) weatherBitmap).getBitmap();
+            updateWeathericon();
 
 
             //set Date formatter
             mDateFormat = new SimpleDateFormat("EEE, MMM d yyyy");
             mDate = new Date();
+        }
+
+        private void updateWeathericon() {
+            Resources resources = SunshineWatchFace.this.getResources();
+            Drawable weatherBitmap;
+            
+            if (mWeatherIconId >= 200 && mWeatherIconId <= 232) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_storm, null);
+            } else if (mWeatherIconId >= 300 && mWeatherIconId <= 321) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_light_rain, null);
+            } else if (mWeatherIconId >= 500 && mWeatherIconId <= 504) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_rain, null);
+            } else if (mWeatherIconId == 511) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_snow, null);
+            } else if (mWeatherIconId >= 520 && mWeatherIconId <= 531) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_rain, null);
+            } else if (mWeatherIconId >= 600 && mWeatherIconId <= 622) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_snow, null);
+            } else if (mWeatherIconId >= 701 && mWeatherIconId <= 761) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_fog, null);
+            } else if (mWeatherIconId == 761 || mWeatherIconId == 781) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_storm, null);
+            } else if (mWeatherIconId == 800) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_clear, null);
+            } else if (mWeatherIconId == 801) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_light_clouds, null);
+            } else if (mWeatherIconId >= 802 && mWeatherIconId <= 804) {
+                weatherBitmap = resources.getDrawable( R.drawable.ic_cloudy, null);
+            } else { //default
+                weatherBitmap = resources.getDrawable( R.drawable.ic_clear, null);
+            }
+
+            mWeatherIcon = ((BitmapDrawable) weatherBitmap).getBitmap();
         }
 
         @Override
@@ -327,6 +360,13 @@ public class SunshineWatchFace extends CanvasWatchFaceService {
 
                 String highTemp = sharedPref.getString(getString(R.string.high_temp), getString(R.string.empty_string_placeholder));
                 String lowTemp = sharedPref.getString(getString(R.string.low_temp), getString(R.string.empty_string_placeholder));
+                int tempWeatherid = sharedPref.getInt(getString(R.string.weather_id), 800);
+
+                //if weather id has changed, update bitmap
+                if(tempWeatherid != mWeatherIconId){
+                    mWeatherIconId = tempWeatherid;
+                    updateWeathericon();
+                }
 
             /*
              * Calculate size of icon bitmap so it is 1/4th of a screen width
